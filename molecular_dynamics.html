@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>molecular_dynamics.js</title>
+</head>
+    <body>
+    <script type="text/javascript">
+    <!--
+        var worker = new Worker("molecular_dynamics_wrapper.js");
+        
+        worker.addEventListener('message', function(e) {
+            eval(e.data);
+        });
+        worker.postMessage();
+        
+        var window_buffers_ids = ['_buffer0', '_buffer1'];
+        var current_draw_buffer = 0;
+       
+        function switch_draw_buffer(windowid) 
+        { 
+            var draw_buffer_id = window_buffers_ids[current_draw_buffer];
+            var show_buffer_id = window_buffers_ids[(current_draw_buffer+1)%window_buffers_ids.length]
+            var draw_buffer = document.getElementById('windowid'+windowid+draw_buffer_id);
+            var show_buffer = document.getElementById('windowid'+windowid+show_buffer_id);
+        
+            draw_buffer.style.visibility='visible';
+            show_buffer.style.visibility='hidden';
+            
+            var ctx=show_buffer.getContext("2d");            
+            ctx.clearRect(0, 0, show_buffer.width, show_buffer.height); 
+            
+            current_draw_buffer=(current_draw_buffer+1)%window_buffers_ids.length;
+                        worker.postMessage(1);
+        };
+
+        function draw_point(windowid, x, y, color_r, color_g, color_b) 
+        {
+            var c=document.getElementById('windowid'+windowid+window_buffers_ids[current_draw_buffer]);
+            var ctx=c.getContext("2d");
+            ctx.fillStyle="rgba(" + color_r + ", " + color_g + ", " + color_b + ", 0.5)";
+            ctx.beginPath();
+            ctx.arc(x, y, 3, 0, 2*Math.PI, false);
+            ctx.fill();
+        };
+
+        function init_window(windowid) 
+        { 
+            var window_handel = [document.createElement('canvas'), document.createElement('canvas')];          
+            for(var i = 0; i < window_handel.length; ++i)
+            {
+                window_handel[i].setAttribute('id', 'windowid'+windowid+window_buffers_ids[i]);
+                window_handel[i].style.background = "#FFFFFF";
+                window_handel[i].style.border = "1px solid black";
+                window_handel[i].setAttribute('height', '600px');
+                window_handel[i].setAttribute('width', '600px');
+                window_handel[i].style.position = "absolute";   
+                document.getElementsByTagName("body")[0].appendChild(window_handel[i]);     
+            }
+            window_handel[1].style.visibility='hidden';
+        }
+        
+
+
+        function get_cycel_waittime()
+        {
+            return parseInt(document.getElementById("cycel_waittime").value, 10);
+        }
+    -->
+    </script>
+<!--<form>
+        wait after cycle [ms]:<input type="text" id="cycel_waittime" value="1000" />
+    </form>
+-->
+</body>
+</html>
