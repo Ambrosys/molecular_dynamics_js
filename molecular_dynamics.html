@@ -9,6 +9,8 @@
     <!--
         var worker = new Worker("molecular_dynamics_wrapper.js");
         
+        var scale = 5.0;
+        
         worker.addEventListener('message', function(e) {
             eval(e.data);
         });
@@ -38,9 +40,9 @@
         {
             var c=document.getElementById('windowid'+windowid+window_buffers_ids[current_draw_buffer]);
             var ctx=c.getContext("2d");
-            ctx.fillStyle="rgba(" + color_r + ", " + color_g + ", " + color_b + ", 0.5)";
+            ctx.fillStyle="rgba(" + color_r + ", " + color_g + ", " + color_b + ", 1.0 )";
             ctx.beginPath();
-            ctx.arc(x, y, 3, 0, 2*Math.PI, false);
+            ctx.arc(x*scale, y*scale, scale , 0, 2*Math.PI, false);
             ctx.fill();
         };
 
@@ -52,8 +54,8 @@
                 window_handel[i].setAttribute('id', 'windowid'+windowid+window_buffers_ids[i]);
                 window_handel[i].style.background = "#FFFFFF";
                 window_handel[i].style.border = "1px solid black";
-                window_handel[i].setAttribute('height', '600px');
-                window_handel[i].setAttribute('width', '600px');
+                window_handel[i].setAttribute('height', 150*scale+'px');
+                window_handel[i].setAttribute('width' , 150*scale+'px');
                 window_handel[i].style.position = "absolute";   
                 document.getElementsByTagName("body")[0].appendChild(window_handel[i]);     
             }

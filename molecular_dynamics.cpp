@@ -31,8 +31,8 @@ using namespace boost::numeric::odeint;
 using namespace std;
 #define tab "\t"
 
-const size_t n1 = 8;
-const size_t n2 = 8;
+const size_t n1 = 16;
+const size_t n2 = 16;
 
 struct md_system
 {
@@ -43,7 +43,7 @@ struct md_system
                double gamma = 0.0   ,       // friction
                double eps = 0.1 ,          // interaction strenght
                double sigma = 1.0 ,            // interaction radius
-               double xmax = 600.0 , double ymax = 600.0 )
+               double xmax = 150.0 , double ymax = 150.0 )
     : m_a( a ) , m_gamma( gamma ) 
     , m_eps( eps ) , m_sigma( sigma ) 
     , m_xmax( xmax ) , m_ymax( ymax )
@@ -120,7 +120,7 @@ namespace js
         extern void init();
         extern void init_window(int window_id);
         extern void switch_draw_buffer(int window_id);
-        extern void draw_point(int window_id, int x, int y, int color_r, int color_g, int color_b);   
+        extern void draw_point(int window_id, double x, double y, int color_r, int color_g, int color_b);   
         extern int get_cycel_waittime();
     }
 } 
@@ -144,10 +144,12 @@ int main( int argc , char *argv[] )
     {
         for( size_t j=0 ; j<n2 ; ++j )
         {
-            x[i*n2+j  ] = 5.0 + i * 4.0 ;
-            x[i*n2+j+n] = 5.0 + j * 4.0 ;
-            v[i]   = dist( rng ) ;
-            v[i+n] = dist( rng ) ;
+            size_t i1 = i*n2+j;
+            size_t i2 = i*n2+j+n;
+            x[ i1 ] = 5.0 + i * 4.0 ;
+            x[ i2 ] = 5.0 + j * 4.0 ;
+            v[ i1 ]   = dist( rng ) ;
+            v[ i2 ] = dist( rng ) ;
         }
     }
     
@@ -161,16 +163,17 @@ int main( int argc , char *argv[] )
     while(true)
     {
 
-        for( size_t ii=0 ; ii<100 ; ++ii,t+=dt )
+        for( size_t ii=0 ; ii<10 ; ++ii,t+=dt )
             stepper.do_step( sys , std::make_pair( std::ref( x ) , std::ref( v ) ) , t , dt );
         sys.bc( x );
         
         for( size_t i=0 ; i<n ; ++i )
         {
-            boost::crc_basic<8> color[3] = { boost::crc_basic<8>(50),boost::crc_basic<8>(128), boost::crc_basic<8>(180) };
-            for(auto & c: color)
-                c.process_byte(i);
-            js::draw_point(window_id, x[i], x[i+n], color[0].checksum(), color[1].checksum(), color[2].checksum());
+//             boost::crc_basic<8> color[3] = { boost::crc_basic<8>(50),boost::crc_basic<8>(128), boost::crc_basic<8>(180) };
+//             for(auto & c: color)
+//                 c.process_byte(i);
+//             js::draw_point(window_id, x[i], x[i+n], color[0].checksum(), color[1].checksum(), color[2].checksum());
+            js::draw_point(window_id, x[i], x[i+n], 255 , 0 , 0 );
         }
         
         std::chrono::milliseconds dura( js::get_cycel_waittime() );
