@@ -12,10 +12,10 @@
         worker.addEventListener('message', function(e) {
             eval(e.data);
         });
-        worker.postMessage();
+        worker.postMessage('');
         
-        var window_buffers_ids = ['_buffer0', '_buffer1'];
-        var current_draw_buffer = 0;
+        window_buffers_ids = ['_buffer0', '_buffer1'];
+        current_draw_buffer = 0;
        
         function switch_draw_buffer(windowid) 
         { 

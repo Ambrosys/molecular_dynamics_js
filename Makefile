@@ -1,4 +1,6 @@
-INCLUDES = I$(ODEINT_ROOT) -I$(BOOST_ROOT)
+ODEINT_ROOT=odeint-v2
+BOOST_ROOT=boost_1_54_0
+INCLUDES = -I$(ODEINT_ROOT) -I$(BOOST_ROOT)
 OPTIONS = -O2 -std=c++11
 
 molecular_dynamics.js: molecular_dynamics_js_to_c.js molecular_dynamics.cpp
